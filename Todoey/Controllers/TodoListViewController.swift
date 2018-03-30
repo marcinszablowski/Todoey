@@ -19,10 +19,10 @@ class TodoListViewController: UITableViewController {
         
         print(dataFilePath!)
 
-//        let newItem = Item()
+//        let newItem = Item() 
 //        newItem.title = "Think better"
 //        itemArray.append(newItem)
-//        
+//
 //        let newItem2 = Item()
 //        newItem2.title = "Be patient"
 //        itemArray.append(newItem2)

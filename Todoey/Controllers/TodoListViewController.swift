@@ -15,7 +15,7 @@ class TodoListViewController: UITableViewController {
     
     var selectedCategory : Category? {
         didSet {
-            loadItems()
+           //  loadItems()
         }
     }
     
@@ -33,8 +33,8 @@ class TodoListViewController: UITableViewController {
 //        let newItem2 = Item()
 //        newItem2.title = "Be patient"
 //        itemArray.append(newItem2)
-        
-        loadItems()
+//
+//        loadItems()
     }
     
     // MARK - TableView Datasource Methods
@@ -97,12 +97,12 @@ class TodoListViewController: UITableViewController {
             
             print("Success!")
     
-            let newItem = Item(context: self.context)
-            newItem.title = textField.text!
-            newItem.done = false
-            newItem.parentCategory = self.selectedCategory
-            
-            self.itemArray.append(newItem)
+//            let newItem = Item(context: self.context)
+//            newItem.title = textField.text!
+//            newItem.done = false
+//            newItem.parentCategory = self.selectedCategory
+//
+//            self.itemArray.append(newItem)
             
             self.saveItems()
             
@@ -133,29 +133,29 @@ class TodoListViewController: UITableViewController {
     }
     
     //Load items. Create fetch request.
-    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest(), predicate: NSPredicate? = nil) {
-        
-        let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
-
-        if let additionalPredicate = predicate {
-            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, additionalPredicate])
-        }
-        else {
-            request.predicate = categoryPredicate
-        }
-        
-//        let compoundPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [categoryPredicate, predicate])
-//        request.predicate = compoundPredicate
-        
-        do {
-        itemArray = try context.fetch(request)
-        }
-        catch {
-            print("Error loading context \(error)")
-        }
-        
-        tableView.reloadData()
-    }
+//    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest(), predicate: NSPredicate? = nil) {
+//
+//        let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
+//
+//        if let additionalPredicate = predicate {
+//            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, additionalPredicate])
+//        }
+//        else {
+//            request.predicate = categoryPredicate
+//        }
+//
+////        let compoundPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [categoryPredicate, predicate])
+////        request.predicate = compoundPredicate
+//
+//        do {
+//        itemArray = try context.fetch(request)
+//        }
+//        catch {
+//            print("Error loading context \(error)")
+//        }
+//
+//        tableView.reloadData()
+//    }
 
     
 //Decode data
@@ -177,32 +177,4 @@ class TodoListViewController: UITableViewController {
 
 // MARK - Search bar methods
 
-extension TodoListViewController : UISearchBarDelegate {
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        
-        let request : NSFetchRequest<Item> = Item.fetchRequest()
-        
-        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
-        
-        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-        
-//        do {
-//            itemArray = try context.fetch(request)
-//        }
-//        catch {
-//            print("Error loading context \(error)")
-//        }
-        
-        loadItems(with: request, predicate: predicate)
-        
-    }
-  
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchBar.text?.count == 0 {
-            loadItems()
-        }
-    }
-    
-    
-}
+

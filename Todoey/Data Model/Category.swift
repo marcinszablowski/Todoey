@@ -9,7 +9,11 @@
 import Foundation
 import RealmSwift
  
+ 
+ //Defining model for Realm use like regular Swift classes
  class Category : Object {
-    @objc dynamic var name: String = ""
+
+    @objc dynamic var name = ""
     let items = List<Item>()
+    
  }

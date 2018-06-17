@@ -9,7 +9,7 @@
 import UIKit
 import RealmSwift
 
-class TodoListViewController: UITableViewController {
+class TodoListViewController: SwipeTableViewController {
     
     let realm = try! Realm()
 
@@ -20,12 +20,10 @@ class TodoListViewController: UITableViewController {
              loadItems()
         }
     }
-    
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
-    
+
     }
     
     // MARK - TableView Datasource Methods
@@ -37,7 +35,7 @@ class TodoListViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
         if let item = todoItems?[indexPath.row] {
             
@@ -63,8 +61,7 @@ class TodoListViewController: UITableViewController {
         if let item = todoItems?[indexPath.row] {
             do {
                 try realm.write {
-                //    item.done = !item.done
-                    realm.delete(item)
+                item.done = !item.done
                 }
             }
             catch {
@@ -75,8 +72,6 @@ class TodoListViewController: UITableViewController {
         tableView.reloadData()
         
         tableView.deselectRow(at: indexPath, animated: true)
-        
-     
         
     }
     
@@ -130,12 +125,25 @@ class TodoListViewController: UITableViewController {
         tableView.reloadData()
     }
     
-    //Decode data
+    //MARK: - Delete Items
+    
+    override func updateModel(at indexPath: IndexPath) {
+        if let itemForDeletion = todoItems?[indexPath.row] {
+            do {
+                try realm.write {
+                    realm.delete(itemForDeletion)
+                }
+            }
+            catch {
+                print("Error trying to delete item: \(error)")
+            }
+        }
+    }
 
     
 }
 
-    // MARK - Search bar methods
+    //MARK - Search bar methods
 
 extension TodoListViewController: UISearchBarDelegate {
     
@@ -143,7 +151,7 @@ extension TodoListViewController: UISearchBarDelegate {
     
         todoItems = todoItems?.filter("title CONTAINS[cd] %@", searchBar.text!).sorted(byKeyPath: "date", ascending: false)
         
-        tableView.reloadData()
+       
         
     }
     
@@ -156,7 +164,6 @@ extension TodoListViewController: UISearchBarDelegate {
             }
         }
     }
-    
     
 }
 

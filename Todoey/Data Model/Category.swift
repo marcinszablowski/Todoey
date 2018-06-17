@@ -8,6 +8,7 @@
 
 import Foundation
 import RealmSwift
+import ChameleonFramework
  
  
  //Defining model for Realm use like regular Swift classes
@@ -15,5 +16,6 @@ import RealmSwift
 
     @objc dynamic var name = ""
     let items = List<Item>()
-    
+    @objc dynamic var color = ""
+ 
  }

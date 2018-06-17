@@ -8,8 +8,9 @@
 
 import UIKit
 import RealmSwift
+import ChameleonFramework
 
-class CategoryViewController: UITableViewController {
+class CategoryViewController: SwipeTableViewController  {
 
     let realm = try! Realm()
     
@@ -18,6 +19,7 @@ class CategoryViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         load()
+        tableView.separatorStyle = .none
     }
 
     //MARK: - Add new categories
@@ -53,20 +55,22 @@ class CategoryViewController: UITableViewController {
         //categoryAlert.addAction(categoryAction)
         present(categoryAlert, animated: true, completion: nil)
         
-        
     }
 
     
     //MARK: - TableView Datasource Methods
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return categories?.count ?? 1
     }
-    
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath)
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
         cell.textLabel?.text = categories?[indexPath.row].name ?? "No categories added yet!"
+        
+        cell.backgroundColor = UIColor(hexString: Category.color)
         
         return cell
         
@@ -100,6 +104,23 @@ class CategoryViewController: UITableViewController {
         
      }
     
+    //MARK: - Delete Data From Swipe
+    
+    override func updateModel(at indexPath: IndexPath) {
+        if let categoryForDeletion = self.categories?[indexPath.row] {
+            do {
+                try self.realm.write {
+                    self.realm.delete(categoryForDeletion)
+                }
+            }
+            catch {
+                print("Error trying to delete category: \(error)")
+            }
+
+        }
+    }
+
+    
     //MARK: - TableView Delegate Methods
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -114,6 +135,7 @@ class CategoryViewController: UITableViewController {
         }
         
     }
-
     
 }
+
+
